@@ -5,7 +5,7 @@ import logo from './logo.svg';
 import './App.css';
 import Axios from 'axios';
 
-class App extends Component {
+class Client extends Component {
     constructor(){
         super();
     }
@@ -20,6 +20,7 @@ class App extends Component {
         return (
             <div className="client">
                 <h1>Cliente</h1>
+                <a href='/#/client/new'>Novo cliente</a>                
                 {children}
             </div>
         );
@@ -30,9 +31,9 @@ class App extends Component {
 //     name: PropTypes.string
 // };
 
-App.defaultProps = {
+Client.defaultProps = {
     name: 'My Page Name'
 };
 
 
-export default App;
+export default Client;

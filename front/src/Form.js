@@ -11,6 +11,8 @@ class Form extends Component {
             cpf: '',
             email: ''
         }
+
+        this.action=null;
     }
 
     componentDidMount(){
@@ -23,12 +25,30 @@ class Form extends Component {
                 }
             }).catch(()=>{
                 alert('Not found')
-            })
+            });
         }
     }
 
-    requestItem(){
+    save(){
+        if(this.props.route.path != 'new'){
+            Axios.put('http://localhost:8000/'+this.props.resource+'/'+this.props.params.id,{
 
+            })
+            .then((response)=>{
+                console.log('response put', response)
+            }).catch((err)=>{
+                console.log('err',err)
+            });
+        }else{
+            Axios.post('http://localhost:8000/'+this.props.resource,{
+
+            })
+            .then((response)=>{
+                console.log('response post', response)
+            }).catch((err)=>{
+                console.log('err',err)
+            });
+        }
     }
 
     render() {
@@ -39,6 +59,10 @@ class Form extends Component {
                     <input value={this.state.email} />
                     <input value={this.state.id} />
                     <input value={this.state.cpf} />
+
+                    <button onClick={()=>{
+                            this.save();
+                        }}>Salvar</button>
                 </form>
             </div>
         );

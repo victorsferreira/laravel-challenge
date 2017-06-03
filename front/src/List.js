@@ -26,6 +26,17 @@ class List extends Component {
         });
     }
 
+    delete(id){
+        Axios.delete('http://localhost:8000/'+this.props.resource+'/'+id,{
+
+        })
+        .then((response)=>{
+            console.log('response delete', response)
+        }).catch((err)=>{
+            console.log('err',err)
+        });
+    }
+
     render() {
         var items = this.state.items.map(function(item,i){
             return (
@@ -34,7 +45,7 @@ class List extends Component {
                         {item.attributes.cpf}
                     </a>
                     <button onClick={()=>{
-                            alert('deletar')
+                            this.delete(item.id)
                         }}>
                         Delete
                     </button>
