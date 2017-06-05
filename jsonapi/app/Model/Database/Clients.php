@@ -7,6 +7,8 @@ class Clients extends Model
     // public $timestamps = false;
     protected $table = 'clients';
     protected $primaryKey = 'id';
+    protected $fillable = ['name','cpf','email','created_at','updated_at','deleted_at'];
+
 
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasOne

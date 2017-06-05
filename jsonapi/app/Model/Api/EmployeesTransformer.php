@@ -74,7 +74,7 @@ class EmployeesTransformer implements JsonApiMapping
         return [
             'self' => ['name' => 'employees.show', 'as_id' => 'id'],
             'employees' => ['name' => 'employees.index'],
-            'employee_orders' => ['name' => 'employees.orders', 'as_id' => 'id']
+            // 'employee_orders' => ['name' => 'employees.orders', 'as_id' => 'id']
         ];
     }
 

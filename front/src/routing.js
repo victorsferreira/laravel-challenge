@@ -15,7 +15,7 @@ import Form from './Form';
 export const renderRoutes = () => (
     <Router history={hashHistory}>
         <Route path="/" component={App}>
-            <Route path='client' component={Client}>
+            <Route path='clients' component={Client}>
                 <IndexRoute component={List}/>
                 <Route path='new' component={Form} />
                 <Route path=':id' component={Form} />

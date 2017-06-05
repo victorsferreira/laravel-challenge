@@ -27,18 +27,30 @@ class List extends Component {
     }
 
     delete(id){
-        Axios.delete('http://localhost:8000/'+this.props.resource+'/'+id,{
+        // Axios.delete('http://localhost:8000/'+this.props.resource+'/'+id,{})
+        // .then((response)=>{
+        //     console.log('response delete', response)
+        // }).catch((err)=>{
+        //     console.log('err',err)
+        // });
 
+        Axios({
+            method: 'delete',
+            url: 'http://localhost:8000/'+this.props.resource+'/'+id,
+            data: {}
+        }).then((response)=>{
+            if(response.status == 204){
+                var items = this.state.items.filter((item)=>{
+                    return item.id != id
+                });
+
+                this.setState({items: items})
+            }
         })
-        .then((response)=>{
-            console.log('response delete', response)
-        }).catch((err)=>{
-            console.log('err',err)
-        });
     }
 
     render() {
-        var items = this.state.items.map(function(item,i){
+        var items = this.state.items.map((item,i)=>{
             return (
                 <div key={i}>
                     <a href={'/#/client/'+item.id}>

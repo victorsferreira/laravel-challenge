@@ -13,10 +13,10 @@ class Employees extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
      */
-    public function latestOrders()
-    {
-        return $this->hasMany(Orders::class, 'employee_id')->limit(10);
-    }
+    // public function latestOrders()
+    // {
+    //     return $this->hasMany(Orders::class, 'employee_id')->limit(10);
+    // }
 
     /**
      * @return string
