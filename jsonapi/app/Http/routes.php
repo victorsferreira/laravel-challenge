@@ -22,9 +22,24 @@ Route::group(['namespace' => 'Api'], function() {
         'employees/{employee_id}/orders', [
             'as' => 'employees.orders',
             'uses' => 'EmployeesController@getOrdersByEmployee'
-        ]);
+        ]
+    );
 
-        Route::resource('clients', 'ClientsController');
-        Route::resource('purchases', 'PurchasesController');
-        Route::resource('products', 'ProductsController');
-    });
+    Route::get(
+        'clients/{client_id}/purchases', [
+            'as' => 'clients.purchases',
+            'uses' => 'ClientsController@getPurchasesByClient'
+        ]
+    );
+
+    Route::get(
+        'products/{product_id}/purchases', [
+            'as' => 'products.purchases',
+            'uses' => 'ProductsController@getPurchasesByProduct'
+        ]
+    );
+
+    Route::resource('clients', 'ClientsController');
+    Route::resource('purchases', 'PurchasesController');
+    Route::resource('products', 'ProductsController');
+});

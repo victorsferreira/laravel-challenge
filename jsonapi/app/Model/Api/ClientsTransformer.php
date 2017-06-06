@@ -72,9 +72,11 @@ class ClientsTransformer implements JsonApiMapping
     {
         return [
             'self' => ['name' => 'clients.show', 'as_id' => 'id'],
-            'clients' => ['name' => 'clients.index']
+            'clients' => ['name' => 'clients.index'],
+            'client_purchases' => ['name' => 'clients.purchases', 'as_id' => 'id']
         ];
     }
+    
 
     /**
      * Returns an array containing the relationship mappings as an array.

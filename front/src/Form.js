@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Axios from 'axios';
 import moment from 'moment';
 import { hashHistory } from 'react-router'
+import {Link} from 'react-router';
 // import Input from './Input';
 
 class Form extends Component {
@@ -9,7 +10,8 @@ class Form extends Component {
         super();
 
         this.state = {
-            fields: {}
+            fields: {},
+            relationships:[]
         }
 
         this.fields = {};
@@ -19,11 +21,13 @@ class Form extends Component {
         if(this.props.route.path != 'new'){
             Axios.get('http://localhost:8000/'+this.props.resource+'/'+this.props.params.id)
             .then((response)=>{
+                console.log(response)
                 if(response.status == 200){
                     var item = response.data.data;
                     this.fields = item.attributes;
                     this.id = item.id;
-
+// console.log(response.data.included)
+                    this.setState({relationships: response.data.included});
                     this.setFields(item.attributes);
                 }
             }).catch(()=>{
@@ -50,6 +54,10 @@ class Form extends Component {
 
     save(){
         var data = Object.assign(this.fields,this.state.fields);
+        for(var k in data){
+            if(Array.isArray(data[k])) delete data[k];
+        }
+
         var request = {
             data: {
                 type: this.props.resource_singular || this.props.resource,
@@ -105,6 +113,12 @@ class Form extends Component {
                     this.changeValue(event.target.value,k)
                 }} value={this.state.fields[k]} />);
             }
+        });
+
+        var relationships = this.state.relationships.map(function(relationship, i){
+            return (
+                <Link key={i} to={relationship.links.self.href}>{relationship.attributes.date}</Link>
+            )
         })
 
         return (
@@ -116,6 +130,8 @@ class Form extends Component {
                             this.save();
                         }}>Salvar</button>
                 </form>
+
+                {relationships}
             </div>
         );
     }

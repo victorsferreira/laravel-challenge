@@ -17,6 +17,7 @@ export const renderRoutes = () => (
         <Route path="/" component={App}>
             <Route path='clients' component={Client}>
                 <IndexRoute component={List}/>
+                <Route path='page/:number' component={List} />
                 <Route path='new' component={Form} />
                 <Route path=':id' component={Form} />
             </Route>

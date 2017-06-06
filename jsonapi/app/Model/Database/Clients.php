@@ -13,10 +13,10 @@ class Clients extends Model
     /**
     * @return \Illuminate\Database\Eloquent\Relations\HasOne
     */
-    // public function purchases()
-    // {
-    //     return $this->hasMany(Purchases::class,'client_id');
-    // }
+    public function purchases()
+    {
+        return $this->hasMany(Purchases::class,'client_id');
+    }
 
     // public function products()
     // {
