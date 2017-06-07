@@ -21,6 +21,12 @@ export const renderRoutes = () => (
                 <Route path='new' component={Form} />
                 <Route path=':id' component={Form} />
             </Route>
+            <Route path='products' component={Product}>
+                <IndexRoute component={List}/>
+                <Route path='page/:number' component={List} />
+                <Route path='new' component={Form} />
+                <Route path=':id' component={Form} />
+            </Route>
         </Route>
     </Router>
 );

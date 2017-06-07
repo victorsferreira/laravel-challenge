@@ -11,6 +11,7 @@ class Form extends Component {
 
         this.state = {
             fields: {},
+            relationship_collections: {},
             relationships:[]
         }
 
@@ -19,14 +20,14 @@ class Form extends Component {
 
     componentWillMount(){
         if(this.props.route.path != 'new'){
-            Axios.get('http://localhost:8000/'+this.props.resource+'/'+this.props.params.id)
+            Axios.get('http://localhost:8000/'+this.props.collection+'/'+this.props.params.id)
             .then((response)=>{
                 console.log(response)
                 if(response.status == 200){
                     var item = response.data.data;
                     this.fields = item.attributes;
                     this.id = item.id;
-// console.log(response.data.included)
+
                     this.setState({relationships: response.data.included});
                     this.setFields(item.attributes);
                 }
@@ -36,6 +37,36 @@ class Form extends Component {
         }
 
         this.setFields(this.props.fields,'');
+        this.getRelationships();
+    }
+
+    getRelationships(){
+
+        var field;
+        for(var k in this.props.fields){
+            field = this.props.fields[k];
+
+            if(field.type == 'reference'){
+                this.getRelationship(field.collection);
+            }
+        }
+    }
+
+
+    getRelationship (collection){
+        var data;
+        Axios.get('http://localhost:8000/'+collection)
+        .then((response)=>{
+            console.log(response)
+            if(response.status == 200){
+                var relationship_collections = this.state.relationship_collections;
+                relationship_collections[collection] = response.data.data;
+                this.setState({relationship_collections: relationship_collections})
+            }
+        }).catch((err)=>{
+            console.log(err)
+            alert('Not found 1'+collection)
+        });
     }
 
     setFields(fields, default_value=null){
@@ -60,7 +91,7 @@ class Form extends Component {
 
         var request = {
             data: {
-                type: this.props.resource_singular || this.props.resource,
+                type: this.props.resource || this.props.collection,
                 attributes: data
             }
         };
@@ -72,7 +103,7 @@ class Form extends Component {
 
             request.data.attributes.updated_at = moment().format('YYYY-MM-DD HH:mm:ss');
 
-            Axios.put('http://localhost:8000/'+this.props.resource+'/'+this.props.params.id,request)
+            Axios.put('http://localhost:8000/'+this.props.collection+'/'+this.props.params.id,request)
             .then((response)=>{
                 console.log('response put', response)
             }).catch((err)=>{
@@ -82,11 +113,11 @@ class Form extends Component {
             request.data.attributes.created_at = moment().format('YYYY-MM-DD HH:mm:ss');
             request.data.attributes.updated_at = null;
 
-            Axios.post('http://localhost:8000/'+this.props.resource,request)
+            Axios.post('http://localhost:8000/'+this.props.collection,request)
             .then((response)=>{
                 console.log('response post', response)
                 if(response.status == 201){
-                    hashHistory.push('/'+this.props.resource+'/'+response.data.data.id)
+                    hashHistory.push('/'+this.props.collection+'/'+response.data.data.id)
                 }
             }).catch((err)=>{
                 console.log('err',err)
@@ -112,26 +143,54 @@ class Form extends Component {
                 return (<input type='text' key={i} onChange={(event)=>{
                     this.changeValue(event.target.value,k)
                 }} value={this.state.fields[k]} />);
-            }
-        });
+            }else if(type == 'reference'){
 
-        var relationships = this.state.relationships.map(function(relationship, i){
-            return (
-                <Link key={i} to={relationship.links.self.href}>{relationship.attributes.date}</Link>
-            )
+                if(this.state.relationship_collections[field.collection]){
+                    var options = this.state.relationship_collections[field.collection].map((option, i)=>{
+                        return (<option key={i} value='{option.attributes.id}'>{option.attributes[field.key]}</option>);
+                    });
+                }
+
+                return (
+                    <select key={i} value={this.state.fields[k]}>
+                        {options}
+                    </select>
+                )
+            }
+        }
+    );
+
+    var relationship_ref, relationship_label;
+    var relationships = this.state.relationships.map((relationship, i)=>{
+        relationship_ref = this.props.relationships[relationship.type];
+        relationship_label = [];
+
+        relationship_ref.label.map((label)=>{
+            relationship_label.push(label.text+': '+relationship.attributes[label.key]);
         })
 
         return (
-            <div className="form">
-                <form>
-                    {fields}
+            <li key={i}>
+                <Link to={relationship.links.self.href}>
+                    {relationship_label.join(', ')}
+                </Link>
+            </li>
+        )
+    })
 
-                    <button type='button' onClick={()=>{
-                            this.save();
-                        }}>Salvar</button>
+    return (
+        <div className="form">
+            <form>
+                {fields}
+
+                <button type='button' onClick={()=>{
+                        this.save();
+                    }}>Salvar</button>
                 </form>
 
-                {relationships}
+                <ul>
+                    {relationships}
+                </ul>
             </div>
         );
     }

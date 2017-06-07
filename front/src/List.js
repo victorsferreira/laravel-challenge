@@ -25,7 +25,7 @@ class List extends Component {
     }
 
     requestItems(){
-        Axios.get('http://localhost:8000/'+this.props.resource+'/?page[size]=3&page[number]='+this.state.current_page)
+        Axios.get('http://localhost:8000/'+this.props.collection+'/?page[size]=3&page[number]='+this.state.current_page)
         .then((response)=>{
             var has_previous_page = false, has_next_page = false;
             var response_data = response.data;
@@ -45,7 +45,7 @@ class List extends Component {
     delete(id){
         Axios({
             method: 'delete',
-            url: 'http://localhost:8000/'+this.props.resource+'/'+id,
+            url: 'http://localhost:8000/'+this.props.collection+'/'+id,
             data: {}
         }).then((response)=>{
             if(response.status == 204){
@@ -62,7 +62,7 @@ class List extends Component {
         var items = this.state.items.map((item,i)=>{
             return (
                 <div key={i}>
-                    <Link to={'clients/'+item.id}>{item.attributes.cpf}</Link>
+                    <Link to={'clients/'+item.id}>{item.attributes[this.props.label]}</Link>
                     <button onClick={()=>{
                             this.delete(item.id)
                         }}>

@@ -11,16 +11,29 @@ class Client extends Component {
         this.fields = {
             cpf: {type: 'string'},
             email: {type: 'string'},
-            name: {type: 'string'}
+            name: {type: 'string'},
+            // purchase: {type: 'reference', collection: 'purchases', key: 'id'}
+        }
+
+        this.relationships = {
+            purchase: {
+                title: 'compras',
+                label: [
+                    {key: 'date', text: 'Data'},
+                    {key: 'product_id', text: 'Id do Produto'}
+                ]
+            }
         }
     }
 
     render() {
         const children = React.Children.map(this.props.children,
             (child) => React.cloneElement(child, {
-                resource: 'clients',
-                resource_singular: 'client',
-                fields: this.fields
+                collection: 'clients',
+                resource: 'client',
+                label: 'cpf',
+                fields: this.fields,
+                relationships: this.relationships
             })
         );
 
@@ -33,14 +46,6 @@ class Client extends Component {
         );
     }
 }
-
-// App.propTypes = {
-//     name: PropTypes.string
-// };
-
-// Client.defaultProps = {
-//     name: 'My Page Name'
-// };
 
 
 export default Client;
