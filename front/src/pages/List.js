@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
-// import './App.css';
 import Axios from 'axios';
 import {Link} from 'react-router';
 
@@ -25,7 +23,7 @@ class List extends Component {
     }
 
     requestItems(){
-        Axios.get('http://localhost:8000/'+this.props.collection+'/?page[size]=3&page[number]='+this.state.current_page)
+        Axios.get('http://localhost:8000/'+this.props.model.collection+'/?page[size]=3&page[number]='+this.state.current_page)
         .then((response)=>{
             var has_previous_page = false, has_next_page = false;
             var response_data = response.data;
@@ -45,7 +43,7 @@ class List extends Component {
     delete(id){
         Axios({
             method: 'delete',
-            url: 'http://localhost:8000/'+this.props.collection+'/'+id,
+            url: 'http://localhost:8000/'+this.props.model.collection+'/'+id,
             data: {}
         }).then((response)=>{
             if(response.status == 204){
@@ -59,12 +57,16 @@ class List extends Component {
     }
 
     render() {
+        var object;
         var items = this.state.items.map((item,i)=>{
+            object = new this.props.model();
+            object.setFields(item.attributes);
+
             return (
                 <div key={i}>
-                    <Link to={'clients/'+item.id}>{item.attributes[this.props.label]}</Link>
+                    <Link to={this.props.model.collection+'/'+object.id}>{object.getListLabel()}</Link>
                     <button onClick={()=>{
-                            this.delete(item.id)
+                            this.delete(object.id)
                         }}>
                         Delete
                     </button>
@@ -75,14 +77,13 @@ class List extends Component {
         return (
             <div className="list">
                 <h1>Lista</h1>
-                <h1>{this.props.name}</h1>
                 <div>
                     {items}
                 </div>
 
                 {
                     this.state.has_previous_page ? (
-                        <Link to={"/clients/page/"+(parseInt(this.state.current_page)-1)}>Anterior</Link>
+                        <Link to={this.props.model.collection+"/page/"+(parseInt(this.state.current_page)-1)}>Anterior</Link>
                     ) : null
                 }
 
@@ -90,7 +91,7 @@ class List extends Component {
 
                 {
                     this.state.has_next_page ? (
-                        <Link to={"/clients/page/"+(parseInt(this.state.current_page)+1)}>Próxima</Link>
+                        <Link to={this.props.model.collection+"/page/"+(parseInt(this.state.current_page)+1)}>Próxima</Link>
                     ) : null
                 }
             </div>

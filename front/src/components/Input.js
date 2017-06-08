@@ -20,14 +20,14 @@ class Input extends Component {
 
     render() {
         return (
-            <div className="input">
+            <div className="input" key={this.props.key}>
                 {
                     this.props.label ? (
-                        <label>{this.props.label}</label>
+                        <label className={this.props.labelClass}>{this.props.label}</label>
                     ) : null
                 }
 
-                <input onChange={this.setValue.bind(this)} />
+                <input className={this.props.class} onChange={this.setValue.bind(this)} />
             </div>
         );
     }
