@@ -27,9 +27,9 @@ Client.collection = 'clients';
 Client.resource = 'client';
 
 Client.fields = {
-    cpf: {type: 'string'},
-    email: {type: 'string'},
-    name: {type: 'string'}
+    cpf: {type: 'string', label: 'cpf'},
+    email: {type: 'string', label: 'email'},
+    name: {type: 'string', label: 'nome'}
 };
 
 Client.relationships = {

@@ -33,11 +33,11 @@ Purchase.collection = 'purchases';
 Purchase.resource = 'purchase';
 
 Purchase.fields = {
-    number: {type: 'string'},
-    amount: {type: 'string'},
-    date: {type: 'string'},
-    client_id: {type: 'reference', collection: 'clients', key: 'id'},
-    product_id: {type: 'reference', collection: 'products', key: 'id'}
+    number: {type: 'string', label: 'número'},
+    amount: {type: 'string', label: 'quantidade'},
+    date: {type: 'string', label: 'data'},
+    client_id: {type: 'reference', collection: 'clients', key: 'id', label: 'cliente'},
+    product_id: {type: 'reference', collection: 'products', key: 'id', label: 'produto'}
 };
 
 Purchase.relationships = {

@@ -27,9 +27,9 @@ Product.collection = 'products';
 Product.resource = 'product';
 
 Product.fields = {
-    name: {type: 'string'},
-    price: {type: 'string'},
-    bar_code: {type: 'string'}
+    name: {type: 'string', label: 'nome'},
+    price: {type: 'string', label: 'preço'},
+    bar_code: {type: 'string', label: 'código de barras'}
 };
 
 Product.relationships = {

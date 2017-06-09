@@ -8,6 +8,9 @@ import ClientModel from '../models/client';
 import PurchaseModel from '../models/purchase';
 import ProductModel from '../models/product';
 
+import Input from '../components/Input';
+import Select from '../components/Select';
+
 const Models = {
     client: ClientModel,
     purchase: PurchaseModel,
@@ -147,28 +150,30 @@ class Form extends Component {
             type = field.type;
 
             if(type == 'string'){
-                return (<input type='text' key={i} onChange={(event)=>{
+                return (<Input label={field.label} key={i} onChange={(event)=>{
                     this.changeValue(event.target.value,k)
                 }} value={this.state.fields[k]} />);
             }else if(type == 'reference'){
+                var options = [];
 
                 if(this.state.relationship_collections[field.collection]){
-                    var options = this.state.relationship_collections[field.collection].map((option, i)=>{
-                        return (<option key={i} value={option.attributes.id}>{option.attributes[field.key]}</option>);
+                    options = this.state.relationship_collections[field.collection].map((option, i)=>{
+                        return {
+                            value: option.attributes.id,
+                            text: option.attributes[field.key]
+                        };
                     });
                 }
 
                 return (
-                    <select onChange={(value)=>{
+                    <Select label={field.label} onChange={(value)=>{
                             var fields = this.state.fields;
                             fields[k] = value.target.value;
 
                             this.setState({
                                 fields: fields
                             });
-                        }} key={i} value={this.state.fields[k]}>
-                        {options}
-                    </select>
+                        }} key={i} value={this.state.fields[k]} options={options} />
                 )
             }
         }
@@ -204,7 +209,7 @@ class Form extends Component {
             </div>
         )
     });
-    
+
     return (
         <div className="form">
             <form>

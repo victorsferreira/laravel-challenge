@@ -16,17 +16,25 @@ class Select extends Component {
 
     render() {
         var options = this.props.options.map((option, i)=>{
-            return (<option key={i} value={option.attributes.id}>{option.attributes[field.key]}</option>);
+            return (<option key={i} value={option.value}>{option.text}</option>);
         });
 
         return (
-            <select key={this.props.key} className={this.props.class} onChange={(event)=>{
-                    this.setState({value: event.target.value});
-                    this.props.onChange(event.target.value);
-                }} value={this.state.value}>
+            <div key={this.props.key} className="select">
+                {
+                    this.props.label ? (
+                        <label className={this.props.labelClass}>{this.props.label}</label>
+                    ) : null
+                }
 
-                {options}
-            </select>
+                <select className={this.props.class} onChange={(event)=>{
+                        this.setState({value: event.target.value});
+                        this.props.onChange(event);
+                    }} value={this.state.value}>
+
+                    {options}
+                </select>
+            </div>
         );
     }
 }
